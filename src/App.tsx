@@ -5,13 +5,21 @@ import SpotifyLoginButton from './components/SpotifyLogin/SpotifyLogin';
 import IndexPage from './pages';
 import Navbar from './components/Navbar/Navbar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { storeTokenInLocalStorage } from './utils/auth';
+import { removeTokenFromLocalStorage, storeTokenInLocalStorage } from './utils/auth';
 
 const queryClient = new QueryClient()
+
+// Contexts to use across the app
 export const SpotifyTokenContext = createContext<string | null>(null)
+export const LogoutFnContext = createContext<(() => void) | undefined>(undefined)
 
 function App() {
   const [token, setToken] = useState<string | null>(null)
+
+  const logout = () => {
+    setToken(null)
+    removeTokenFromLocalStorage()
+  }
 
   useEffect(() => {
     let loadedToken = window.localStorage.getItem("token")
@@ -52,10 +60,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <SpotifyTokenContext.Provider value={token}>
-        <div className='bg-gray-50 min-h-[100vh]'>
-          <Navbar />
-          <RouterProvider router={router} />
-        </div>
+        <LogoutFnContext.Provider value={logout}>
+          <div className='bg-gray-50 min-h-[100vh]'>
+            <Navbar />
+            <RouterProvider router={router} />
+          </div>
+        </LogoutFnContext.Provider>
       </SpotifyTokenContext.Provider>
     </QueryClientProvider>
   );

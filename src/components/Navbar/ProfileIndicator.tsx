@@ -1,4 +1,4 @@
-import { SpotifyTokenContext } from "../../App"
+import { LogoutFnContext, SpotifyTokenContext } from "../../App"
 import { deepCamelCaseKeys } from "../../constants"
 import { AvatarFallback, AvatarImage } from "../../shadcn/components/ui/avatar"
 import { Avatar } from "@radix-ui/react-avatar"
@@ -7,21 +7,25 @@ import { useContext } from "react"
 import { Popover, PopoverContent, PopoverTrigger } from "../../shadcn/components/ui/popover"
 import { Button } from "../../shadcn/components/ui/button"
 import { me } from "../../utils/spotify"
+import { Skeleton } from "../../shadcn/components/ui/skeleton"
 
 
 export const ProfileIndicator = () => {
     const token = useContext(SpotifyTokenContext)
+    const logout = useContext(LogoutFnContext)
 
     const profileQuery = useQuery({
         queryKey: ['profile'],
         queryFn: async () => {
             const data = await me(token!)
-            if (!data) return null
             return deepCamelCaseKeys(data)
         },
         enabled: !!token
     })
 
+    if (profileQuery.isLoading) {
+        return <Skeleton className="w-10 h-10 rounded-full" />
+    }
 
     return (
         <Popover>
@@ -33,9 +37,9 @@ export const ProfileIndicator = () => {
             </PopoverTrigger>
             <PopoverContent align="end">
                 {profileQuery.data?.displayName}
-                <Button variant="destructive">
+                {logout && <Button variant="destructive" onClick={logout}>
                     Logout
-                </Button>
+                </Button>}
             </PopoverContent>
         </Popover>
     )
