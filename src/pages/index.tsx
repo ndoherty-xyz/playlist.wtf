@@ -1,35 +1,44 @@
+
 import { useQuery } from "@tanstack/react-query"
-import { me, myEditablePlaylists } from "../utils/spotify"
+import { PlaylistInfo } from "../components/PlaylistEditor/PlaylistInfo"
+import { PlaylistTracks } from "../components/PlaylistEditor/PlaylistTracks"
+import { useParams } from "react-router-dom"
+import { getPlaylist } from "../utils/spotify"
 import { useContext } from "react"
 import { SpotifyTokenContext } from "../App"
-import { deepCamelCaseKeys } from "../constants"
+import { Container } from "../components/Container"
 
 
 
 const IndexPage = () => {
     const token = useContext(SpotifyTokenContext)
+    const { playlistId } = useParams()
 
-    const profileQuery = useQuery({
-        queryKey: ['profile'],
-        queryFn: async () => {
-            const data = await me(token!)
-            return deepCamelCaseKeys(data)
-        },
-        enabled: !!token
+    const playlistQuery = useQuery({
+        queryKey: ['playlist', playlistId],
+        queryFn: async () => await getPlaylist({ token: token!, playlistId: playlistId! }),
+        enabled: !!token && !!playlistId
     })
 
-    const playlistsQuery = useQuery({
-        queryKey: ['myEditablePlaylists'],
-        queryFn: async () => {
-            const data = await myEditablePlaylists(token!, profileQuery.data.id)
-            return deepCamelCaseKeys(data)
-        },
-        enabled: !!token && !!profileQuery?.data?.id
-    })
+    const playlist = playlistQuery.data
 
-    return <>
-        {playlistsQuery.data.map((playlist: any) => playlist.name)}
-    </>
+    return (
+        <div className="flex">
+            <div className="flex flex-col flex-1 items-center h-[calc(100vh-130px)] overflow-scroll p-6">
+                <Container className="flex flex-col">
+                    {playlist ? (
+                        <>
+                            <PlaylistInfo playlist={playlist} />
+                            <PlaylistTracks playlistId={playlistId!} />
+                        </>
+                    ) : (
+                        <> no selected playlist</>
+                    )}
+                </Container>
+            </div>
+
+        </div>
+    )
 }
 
 export default IndexPage

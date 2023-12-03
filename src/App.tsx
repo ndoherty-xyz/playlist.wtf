@@ -6,6 +6,10 @@ import IndexPage from './pages';
 import Navbar from './components/Navbar/Navbar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { removeTokenFromLocalStorage, storeTokenInLocalStorage } from './utils/auth';
+import { Toaster } from './shadcn/components/ui/toaster';
+import { PlayerFooter } from './components/Player/PlayerFooter';
+import { PlaylistsPage } from './pages/playlists';
+import { NavbarFooterLayout } from './pages/layouts/NavbarFooterLayout';
 
 const queryClient = new QueryClient()
 
@@ -49,7 +53,11 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <IndexPage />,
+      element: <NavbarFooterLayout><PlaylistsPage /></NavbarFooterLayout>,
+    },
+    {
+      path: '/playlist/:playlistId',
+      element: <NavbarFooterLayout><IndexPage /></NavbarFooterLayout>
     },
     {
       path: '/login',
@@ -62,8 +70,8 @@ function App() {
       <SpotifyTokenContext.Provider value={token}>
         <LogoutFnContext.Provider value={logout}>
           <div className='bg-gray-50 min-h-[100vh]'>
-            <Navbar />
             <RouterProvider router={router} />
+            <Toaster />
           </div>
         </LogoutFnContext.Provider>
       </SpotifyTokenContext.Provider>

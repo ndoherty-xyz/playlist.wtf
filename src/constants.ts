@@ -3,7 +3,7 @@ import camelcaseKeys from "camelcase-keys";
 export let spotifyScopes =
   "user-top-read user-library-read " +
   "playlist-modify-public playlist-read-private playlist-read-collaborative " +
-  "user-read-email playlist-modify-private streaming";
+  "user-read-email playlist-modify-private streaming user-read-playback-state";
 
 export let redirectURI = process.env.REACT_APP_REDIRECT_URL
 export let clientID = process.env.REACT_APP_CLIENT_ID;

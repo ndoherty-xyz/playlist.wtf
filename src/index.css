@@ -81,6 +81,16 @@
   }
 }
 
+@font-face {
+  font-family: "Basteleur-Bold";
+  src: url("../public/fonts/Basteleur-Bold.woff2");
+}
+
+@font-face {
+  font-family: "Basteleur-Moonlight";
+  src: url("../public/fonts/Basteleur-Moonlight.woff2");
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
