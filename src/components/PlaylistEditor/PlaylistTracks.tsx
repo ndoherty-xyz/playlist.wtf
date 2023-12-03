@@ -1,7 +1,3 @@
-import { useInfiniteQuery } from "@tanstack/react-query"
-import { playlistTracksById } from "../../utils/spotify";
-import { useContext } from "react";
-import { SpotifyTokenContext } from "../../App";
 import { Button } from "../../shadcn/components/ui/button";
 import { PlaylistTrack } from "../../types/spotify";
 import { PauseIcon, PlayIcon } from "lucide-react";
@@ -12,31 +8,17 @@ import { usePlayerHandlers } from "../Player/utils";
 
 type PlaylistTracksProps = {
     playlistId: string;
+    tracks: PlaylistTrack[]
 }
 
-export const PlaylistTracks = ({ playlistId }: PlaylistTracksProps) => {
-    const token = useContext(SpotifyTokenContext)
+export const PlaylistTracks = ({ playlistId, tracks }: PlaylistTracksProps) => {
 
-    const tracksQuery = useInfiniteQuery({
-        queryKey: ['tracks', playlistId],
-        queryFn: async ({ pageParam }) => {
-            return playlistTracksById(token!, playlistId, pageParam * 20)
-        },
-        initialPageParam: 0,
-        getNextPageParam: (lastPage, pages, lastPageParam) => {
-            if (lastPage.total <= lastPage.offset + lastPage.limit) {
-                return undefined
-            }
-            return lastPageParam + 1
-        },
-    })
 
     return <>
-        <div className="flex flex-col gap-2">
-            {tracksQuery.data?.pages.map(page => page.items.map((track: any) => (
+        <div className="flex flex-col gap-2 pb-6">
+            {tracks.map((track: PlaylistTrack) => (
                 <TrackRow playlistTrack={track} playlistUri={`spotify:playlist:${playlistId}`} />
-            )))}
-            {tracksQuery.hasNextPage && <Button onClick={() => tracksQuery.fetchNextPage()}>Load more</Button>}
+            ))}
         </div>
 
     </>
@@ -66,13 +48,13 @@ const TrackRow = ({ playlistTrack, playlistUri }: TrackRowProps) => {
             <div className="flex gap-2 items-center">
                 <img alt={`${playlistTrack.track.name} cover`} src={playlistTrack.track.album.images[0]?.url} width={55} height={55} className="rounded-sm object-cover aspect-square" />
                 <div>
-                    <h6 className="font-semibold">{playlistTrack.track.name}</h6>
+                    <h6 className="font-semibold font-funky text-sm">{playlistTrack.track.name}</h6>
                     <p className="text-sm text-gray-500">
                         {playlistTrack.track.artists.map(artist => artist.name).join(', ')}
                     </p>
                 </div>
             </div>
-            {currentlyPlaying?.item.uri === playlistTrack.track.uri ? (
+            {currentlyPlaying?.item?.uri === playlistTrack.track.uri ? (
                 <Button size="icon" variant="outline" onClick={() => pauseTrack()}>
                     <PauseIcon size={20} />
                 </Button>

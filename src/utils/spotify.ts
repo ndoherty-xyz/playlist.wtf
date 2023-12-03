@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios"
-import { CurrentlyPlayingResponse, SimplifiedPlaylist } from "../types/spotify"
+import { CurrentlyPlayingResponse, SimplifiedPlaylist, SpotifyProfile } from "../types/spotify"
 
 export const SPOTIFY_BASE_API_URL = 'https://api.spotify.com'
 
@@ -10,7 +10,7 @@ export const apiHeaders = (token: string) => {
     }
 }
 
-export const me = async (token: string) => {
+export const me = async (token: string): Promise<SpotifyProfile> => {
     if (!token) throw new Error('Not logged in!')
     const url = `${SPOTIFY_BASE_API_URL}/v1/me`
 
@@ -47,6 +47,36 @@ export const myEditablePlaylists = async (token: string, userId: string): Promis
     return playlists.filter((playlist: any) => {
         return playlist.owner.id === userId || playlist.collaborative;
       });
+}
+
+export const allPlaylistTracksById = async (token: string, playlistId: string) => {
+    if (!token) throw new Error('Not logged in!')
+    if (!playlistId) throw new Error('No userId to filter by!')
+    const url = `${SPOTIFY_BASE_API_URL}/v1/playlists/${playlistId}/tracks`
+
+    const firstCall = (await axios.get(url, { headers: apiHeaders(token), params: { limit: 50, offset: 0 } })).data
+    let tracks = firstCall.items
+    let allTracksLoaded = !firstCall.next
+
+    if (!allTracksLoaded) {
+        let offset = 50;
+
+        while (!allTracksLoaded) {
+            const loadMoreCall = (await axios.get(url, { headers: apiHeaders(token), params: { limit: 50, offset } })).data
+
+            offset += 50;
+    
+            tracks = tracks.concat(
+              loadMoreCall.items
+            );
+
+            if (!loadMoreCall.next) {
+                allTracksLoaded = true
+            }
+        }
+    }
+
+    return tracks
 }
 
 export const playlistTracksById = async (token: string, playlistId: string, offset: number) => {

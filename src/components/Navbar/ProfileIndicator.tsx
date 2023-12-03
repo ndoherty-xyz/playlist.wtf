@@ -1,36 +1,15 @@
-import { LogoutFnContext, SpotifyTokenContext } from "../../App"
-import { deepCamelCaseKeys } from "../../constants"
 import { AvatarFallback, AvatarImage } from "../../shadcn/components/ui/avatar"
 import { Avatar } from "@radix-ui/react-avatar"
-import { useQuery } from "@tanstack/react-query"
-import { useContext, useEffect } from "react"
 import { Popover, PopoverContent, PopoverTrigger } from "../../shadcn/components/ui/popover"
 import { Button } from "../../shadcn/components/ui/button"
-import { me } from "../../utils/spotify"
 import { Skeleton } from "../../shadcn/components/ui/skeleton"
-import { AxiosError } from "axios"
+import { useAuth } from "../../utils/auth"
 
 
 export const ProfileIndicator = () => {
-    const token = useContext(SpotifyTokenContext)
-    const logout = useContext(LogoutFnContext)
+    const { logout, profile, profileLoading } = useAuth()
 
-    const profileQuery = useQuery({
-        queryKey: ['profile'],
-        queryFn: async () => {
-            const data = await me(token!)
-            return deepCamelCaseKeys(data)
-        },
-        enabled: !!token
-    })
-
-    useEffect(() => {
-        if (profileQuery.error && profileQuery.error instanceof AxiosError) {
-            if (profileQuery.error.response?.status === 401) logout?.()
-        }
-    }, [profileQuery])
-
-    if (profileQuery.isLoading) {
+    if (profileLoading) {
         return <Skeleton className="w-10 h-10 rounded-full" />
     }
 
@@ -38,15 +17,28 @@ export const ProfileIndicator = () => {
         <Popover>
             <PopoverTrigger>
                 <Avatar className="block w-10 h-10 rounded-full hover:outline hover:outline-2 hover:outline-gray-100">
-                    <AvatarImage className="rounded-full" src={profileQuery.data?.images?.[0].url} />
-                    <AvatarFallback className="rounded-full">{profileQuery.data?.displayName?.substring(0, 1)}</AvatarFallback>
+                    <AvatarImage className="rounded-full" src={profile?.images?.[0].url} />
+                    <AvatarFallback className="rounded-full">{profile?.display_name.substring(0, 1)}</AvatarFallback>
                 </Avatar>
             </PopoverTrigger>
             <PopoverContent align="end">
-                {profileQuery.data?.displayName}
-                {logout && <Button variant="destructive" onClick={logout}>
-                    Logout
-                </Button>}
+                <div className="flex flex-col gap-4 items-center">
+                    <div className="flex gap-2 items-center w-full">
+                        <Avatar className="block w-10 h-10 rounded-full">
+                            <AvatarImage className="rounded-full" src={profile?.images?.[0].url} />
+                            <AvatarFallback className="rounded-full">{profile?.display_name.substring(0, 1)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                            <h4 className="font-funky font-semibold text-sm">{profile?.display_name}</h4>
+                            <p className="text-gray-500 text-xs">{profile?.followers.total} followers</p>
+                        </div>
+
+                    </div>
+
+                    {logout && <Button variant="outline" className="w-full text-red-400 border-red-400 hover:text-red-600 hover:border-red-600 hover:bg-red-100" onClick={logout}>
+                        Logout
+                    </Button>}
+                </div>
             </PopoverContent>
         </Popover>
     )

@@ -1,47 +1,49 @@
 import { useQuery } from "@tanstack/react-query"
-import { useContext, useState } from "react"
 import { me, myEditablePlaylists } from "../utils/spotify"
-import { SpotifyTokenContext } from "../App"
 import { SimplifiedPlaylist } from "../types/spotify"
 import { Link } from "react-router-dom"
-import { Container } from "../components/Container"
+import { PageContainer } from "../components/Container"
 import { Badge } from "../shadcn/components/ui/badge"
 import { ListMusicIcon } from "lucide-react"
+import { useAuth } from "../utils/auth"
+import { LoggedOutPage } from "./LoggedOutPage"
+import { Skeleton } from "../shadcn/components/ui/skeleton"
 
+const loadingPlaylistArray = [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined]
 
 export const PlaylistsPage = () => {
-    const token = useContext(SpotifyTokenContext)
-
-    const profileQuery = useQuery({
-        queryKey: ['profile'],
-        queryFn: async () => await me(token!),
-        enabled: !!token
-    })
+    const { token, isLoggedIn, profile } = useAuth()
 
     const playlistsQuery = useQuery({
         queryKey: ['myEditablePlaylists'],
-        queryFn: async () => await myEditablePlaylists(token!, profileQuery.data.id),
-        enabled: !!token && !!profileQuery?.data?.id
+        queryFn: async () => await myEditablePlaylists(token!, profile?.id!),
+        enabled: !!token && !!profile?.id
     })
 
     const playlists = playlistsQuery.data
 
+    if (!isLoggedIn) {
+        return <LoggedOutPage />
+    }
+
     return (
-        <div className="h-[calc(100vh-130px)] flex flex-col items-center p-16 overflow-scroll">
-            <Container>
-                <div className="grid grid-cols-4 w-full gap-16">
-                    {playlists?.map(playlist => <PlaylistCard playlist={playlist} />)}
-                </div>
-            </Container>
-        </div>
+        <PageContainer className="flex flex-col py-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full gap-8 sm:gap-16 pb-6">
+                {(playlistsQuery.isLoading ? loadingPlaylistArray : playlists)?.map(playlist => <PlaylistCard playlist={playlist} />)}
+            </div>
+        </PageContainer>
     )
 }
 
 type PlaylistCardProps = {
-    playlist: SimplifiedPlaylist
+    playlist: SimplifiedPlaylist | undefined
 }
 
 const PlaylistCard = ({ playlist }: PlaylistCardProps) => {
+
+    if (!playlist) {
+        return <Skeleton className="w-full aspect-square outline outline-1 outline-gray-200" />
+    }
 
     return (
         <Link to={`/playlist/${playlist.id}`}>
@@ -56,7 +58,7 @@ const PlaylistCard = ({ playlist }: PlaylistCardProps) => {
                 <div className="flex justify-between gap-4">
                     <h3 className="font-funky font-semibold text-base line-clamp-2">{playlist.name}</h3>
                     <div className="w-max">
-                        <Badge variant="outline" className="text-gray-500 w-max">{playlist.tracks.total} tracks</Badge>
+                        <Badge variant="outline" className="text-gray-500 w-max">{playlist.tracks.total} track{playlist.tracks.total !== 1 && 's'}</Badge>
                     </div>
                 </div>
             </div>

@@ -2,13 +2,11 @@ import React, { createContext, useEffect, useState } from 'react';
 import './App.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import SpotifyLoginButton from './components/SpotifyLogin/SpotifyLogin';
-import IndexPage from './pages';
-import Navbar from './components/Navbar/Navbar';
+import IndexPage from './pages/PlaylistDetails';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { removeTokenFromLocalStorage, storeTokenInLocalStorage } from './utils/auth';
 import { Toaster } from './shadcn/components/ui/toaster';
-import { PlayerFooter } from './components/Player/PlayerFooter';
-import { PlaylistsPage } from './pages/playlists';
+import { PlaylistsPage } from './pages/Playlists';
 import { NavbarFooterLayout } from './pages/layouts/NavbarFooterLayout';
 
 const queryClient = new QueryClient()
@@ -69,7 +67,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <SpotifyTokenContext.Provider value={token}>
         <LogoutFnContext.Provider value={logout}>
-          <div className='bg-gray-50 min-h-[100vh]'>
+          <div className='bg-gray-50 min-h-[100vh] overflow-hidden'>
             <RouterProvider router={router} />
             <Toaster />
           </div>
