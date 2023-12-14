@@ -1,14 +1,12 @@
-import { useContext } from "react"
-import { SpotifyTokenContext } from "../../App"
 import { Button } from "../../shadcn/components/ui/button"
-import { PauseIcon, PlayIcon, ShuffleIcon, SkipBackIcon, SkipForwardIcon } from "lucide-react"
+import { PauseIcon, PlayIcon, ShuffleIcon, SkipBackIcon, SkipForwardIcon, StepBackIcon, StepForwardIcon } from "lucide-react"
 import { useToast } from "../../shadcn/components/ui/use-toast"
 import { usePlayerHandlers } from "./utils"
+import { AddToPlaylistButton } from "../AddToPlaylistButton"
 
 
 
 export const Player = () => {
-    const token = useContext(SpotifyTokenContext)
     const toast = useToast()
 
     const toastError = () => {
@@ -25,7 +23,7 @@ export const Player = () => {
         pauseTrack,
         nextTrack,
         previousTrack,
-        changeShuffleState
+        changeShuffleState,
     } = usePlayerHandlers({
         onError: toastError
     })
@@ -49,6 +47,10 @@ export const Player = () => {
             ) : (
                 'No active track'
             )}
+            <div className="flex gap-2">
+
+
+            </div>
             <div className="flex gap-2">
                 {currentlyPlaying?.shuffle_state ? (
                     <Button size="icon" variant="ghost" onClick={() => changeShuffleState(false)}>
@@ -74,6 +76,7 @@ export const Player = () => {
                 <Button size="icon" variant="ghost" onClick={() => nextTrack()}>
                     <SkipForwardIcon size={20} />
                 </Button>
+                <AddToPlaylistButton trackURIToAdd={currentlyPlaying?.item?.uri} />
             </div>
 
         </div>

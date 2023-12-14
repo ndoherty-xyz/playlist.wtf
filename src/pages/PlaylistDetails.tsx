@@ -9,8 +9,7 @@ import { useAuth } from "../utils/auth"
 import { LoggedOutPage } from "./LoggedOutPage"
 
 
-
-const IndexPage = () => {
+const PlaylistDetailsPage = () => {
     const { token, isLoggedIn } = useAuth()
     const { playlistId } = useParams()
 
@@ -38,7 +37,7 @@ const IndexPage = () => {
         <PageContainer className="flex flex-col py-12">
             {playlist ? (
                 <>
-                    <PlaylistInfo playlist={playlist} />
+                    <PlaylistInfo playlist={playlist} playlistTracks={tracksQuery.data ?? []} />
                     <PlaylistTracks tracks={tracksQuery.data ?? []} playlistId={playlistId!} />
                 </>
             ) : (
@@ -48,4 +47,4 @@ const IndexPage = () => {
     )
 }
 
-export default IndexPage
+export default PlaylistDetailsPage

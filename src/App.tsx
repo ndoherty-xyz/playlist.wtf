@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import './App.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import SpotifyLoginButton from './components/SpotifyLogin/SpotifyLogin';
-import IndexPage from './pages/PlaylistDetails';
+import PlaylistDetailsPage from './pages/PlaylistDetails';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { removeTokenFromLocalStorage, storeTokenInLocalStorage } from './utils/auth';
 import { Toaster } from './shadcn/components/ui/toaster';
@@ -55,7 +55,7 @@ function App() {
     },
     {
       path: '/playlist/:playlistId',
-      element: <NavbarFooterLayout><IndexPage /></NavbarFooterLayout>
+      element: <NavbarFooterLayout><PlaylistDetailsPage /></NavbarFooterLayout>
     },
     {
       path: '/login',

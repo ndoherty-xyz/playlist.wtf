@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios"
-import { CurrentlyPlayingResponse, SimplifiedPlaylist, SpotifyProfile } from "../types/spotify"
+import { CurrentlyPlayingResponse, Playlist, SimplifiedPlaylist, SpotifyProfile } from "../types/spotify"
 
 export const SPOTIFY_BASE_API_URL = 'https://api.spotify.com'
 
@@ -127,7 +127,7 @@ type GetPlaylistArgs = {
     playlistId: string;
 }
 
-export const getPlaylist = async ({ token, playlistId }: GetPlaylistArgs): Promise<SimplifiedPlaylist> => {
+export const getPlaylist = async ({ token, playlistId }: GetPlaylistArgs): Promise<Playlist> => {
     if (!token) throw new Error('Not logged in!')
     if (!playlistId) throw new Error('No playlist id given!')
     const url = `${SPOTIFY_BASE_API_URL}/v1/playlists/${playlistId}`

@@ -1,12 +1,29 @@
 import { ListMusicIcon } from "lucide-react"
 import { Badge } from "../../shadcn/components/ui/badge"
-import { SimplifiedPlaylist } from "../../types/spotify"
+import { Playlist, PlaylistTrack } from "../../types/spotify"
 
 type PlaylistInfoProps = {
-    playlist: SimplifiedPlaylist
+    playlist: Playlist
+    playlistTracks: PlaylistTrack[]
 }
 
-export const PlaylistInfo = ({ playlist }: PlaylistInfoProps) => {
+export const PlaylistInfo = ({ playlist, playlistTracks }: PlaylistInfoProps) => {
+
+    const playlistDurationSeconds = playlistTracks.map(track => track.track.duration_ms).reduce((acc, duration) => (acc + duration), 0) / 1000
+    const playlistDuration = () => {
+        let seconds = Math.floor(playlistDurationSeconds)
+        let minutes = Math.floor(seconds / 60)
+        let hours = Math.floor(minutes / 60)
+
+        seconds = seconds % 60
+        minutes = minutes % 60
+
+        if (hours || minutes)
+            return `${hours && `${hours} hour${hours !== 1 && 's'}`} ${minutes && `${minutes} minute${minutes !== 1 && 's'}`}`
+        else
+            return `${seconds} second${seconds !== 1 && 's'}`
+    }
+
     return (
         <div className="flex flex-col gap-1 justify-center items-center mb-12 w-full">
             {!playlist.images[0]?.url ? (
@@ -21,6 +38,8 @@ export const PlaylistInfo = ({ playlist }: PlaylistInfoProps) => {
             <div className="flex gap-1">
                 {playlist.collaborative && <Badge variant="default">Collaborative</Badge>}
                 {playlist.public ? <Badge variant="default">Public</Badge> : <Badge variant="default">Private</Badge>}
+                <Badge variant="default">{playlist.followers.total} follower{playlist.followers.total !== 1 && 's'}</Badge>
+                <Badge variant="default">{playlistDuration()}</Badge>
             </div>
         </div>
     )

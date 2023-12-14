@@ -59,6 +59,49 @@ export type SimplifiedPlaylist = {
     uri: string
 }
 
+export type Playlist = {
+    collaborative: boolean,
+    description: string,
+    external_urls: {
+      spotify: string
+    },
+    followers: {
+      href: string,
+      total: number
+    },
+    href: string,
+    id: string,
+    images: SpotifyImagesArray,
+    name: string,
+    owner: {
+      external_urls: {
+        spotify: string
+      },
+      followers: {
+        href: string,
+        total: number
+      },
+      href: string,
+      id: string,
+      type: "user",
+      uri: string,
+      display_name: string
+    },
+    public: boolean,
+    snapshot_id: string,
+    tracks: {
+      href: string,
+      limit: number,
+      next: string,
+      offset: number,
+      previous: string,
+      total: number,
+      items: PlaylistTrack[]
+    },
+    type: string,
+    uri: string
+}
+
 export type PlaylistTrack = {
     added_at: string,
     added_by: {
@@ -121,14 +164,14 @@ export type Track = {
         id: string,
         images: SpotifyImagesArray,
         name: string,
-        popularity: 0,
+        popularity: number,
         type: "artist",
         uri: string
     }[]
     ,
       available_markets: string[],
-      disc_number: 0,
-      duration_ms: 0,
+      disc_number: number,
+      duration_ms: number,
       explicit: false,
       external_ids: {
         isrc: string,
@@ -147,9 +190,9 @@ export type Track = {
         reason: string
       },
       name: string,
-      popularity: 0,
+      popularity: number,
       preview_url: string,
-      track_number: 0,
+      track_number: number,
       type: "track",
       uri: string,
       is_local: false

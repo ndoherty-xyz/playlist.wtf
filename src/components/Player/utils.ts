@@ -1,5 +1,5 @@
-import axios, { Axios, AxiosError } from "axios"
-import { SPOTIFY_BASE_API_URL, apiHeaders, getCurrentlyPlayingTrack } from "../../utils/spotify";
+import axios, { AxiosError } from "axios"
+import { SPOTIFY_BASE_API_URL, apiHeaders } from "../../utils/spotify";
 import { useContext } from "react";
 import { SpotifyTokenContext } from "../../App";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -92,6 +92,52 @@ export const toggleShuffle = async ({ token, newShuffleState, onError }: ToggleS
     }
 }
 
+type SkipArgs = {
+    token: string;
+    currentPos: number;
+    onError?: (error: AxiosError) => void
+}
+
+export const skipAhead = async ({ token, currentPos, onError }: SkipArgs) => {
+    if (!token) throw new Error('Not logged in!') 
+    const url = `${SPOTIFY_BASE_API_URL}/v1/me/player/seek`
+
+    try {
+        return (await axios.put(url, {}, { headers: apiHeaders(token), params: { position_ms: currentPos + 10000 } }))
+    } catch (e) {
+        if (e instanceof AxiosError) onError?.(e)
+    }
+}
+
+export const goBack = async ({ token, currentPos, onError }: SkipArgs) => {
+    if (!token) throw new Error('Not logged in!') 
+    const url = `${SPOTIFY_BASE_API_URL}/v1/me/player/seek`
+
+    try {
+        return (await axios.put(url, {}, { headers: apiHeaders(token), params: { position_ms: currentPos - 10000 } }))
+    } catch (e) {
+        if (e instanceof AxiosError) onError?.(e)
+    }
+}
+
+type AddToPlaylistArgs = {
+    token: string,
+    playlistId: string,
+    trackURI: string
+    onError?: (error: AxiosError) => void
+}
+
+export const addToPlaylist = async ({ token, playlistId, trackURI, onError }: AddToPlaylistArgs) => {
+    if (!token) throw new Error('Not logged in!') 
+    const url = `${SPOTIFY_BASE_API_URL}/v1/playlists/${playlistId}/tracks`
+
+    try {
+        return (await axios.post(url, { uris: [trackURI], }, { headers: apiHeaders(token) }))
+    } catch (e) {
+        if (e instanceof AxiosError) onError?.(e)
+    }
+}
+
 
 
 type UsePlayerHandlersArgs = {
@@ -154,12 +200,40 @@ export const usePlayerHandlers = ({ onError }: UsePlayerHandlersArgs) => {
         }
     })
 
+    const skipAheadMutation = useMutation({
+        mutationFn: () => skipAhead({ token: token!, currentPos: currentlyPlaying.data?.progress_ms!, onError }),
+        mutationKey: ['skipAhead'],
+        onSuccess() {
+            setTimeout(() => queryClient.invalidateQueries({ queryKey: ['currentlyPlaying'] }), 100)
+        }
+    })
+
+    const goBackMutation = useMutation({
+        mutationFn: () => goBack({ token: token!, currentPos: currentlyPlaying.data?.progress_ms!, onError }),
+        mutationKey: ['skipAhead'],
+        onSuccess() {
+            setTimeout(() => queryClient.invalidateQueries({ queryKey: ['currentlyPlaying'] }), 100)
+        }
+    })
+
+
+    const addToPlaylistMutation = useMutation({
+        mutationFn: ({playlistId, trackURI}: { playlistId: string, trackURI: string }) => addToPlaylist({ token: token!, playlistId, trackURI, onError }),
+        mutationKey: ['addToPlaylist'],
+        onSuccess(data, variables, context) {
+            setTimeout(() => queryClient.invalidateQueries({ queryKey: ['playlist', variables.playlistId] }), 100)
+        }
+    })
+
     return {
         currentlyPlaying: currentlyPlaying.data,
         playTrack: playTrackMutation.mutate,
         pauseTrack: pauseTrackMutation.mutate,
         nextTrack: nextTrackMutation.mutate,
         previousTrack: previousTrackMutation.mutate,
-        changeShuffleState: toggleShuffleMutation.mutate
+        changeShuffleState: toggleShuffleMutation.mutate,
+        skipAhead: skipAheadMutation.mutate,
+        goBack: goBackMutation.mutate,
+        addToPlaylist: addToPlaylistMutation.mutate
     }
 }
