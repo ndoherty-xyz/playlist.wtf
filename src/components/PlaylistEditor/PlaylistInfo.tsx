@@ -25,7 +25,7 @@ export const PlaylistInfo = ({ playlist, playlistTracks }: PlaylistInfoProps) =>
     }
 
     return (
-        <div className="flex flex-col gap-1 justify-center items-center mb-12 w-full">
+        <div className="flex flex-col gap-1 justify-center items-center mb-6 w-full">
             {!playlist.images[0]?.url ? (
                 <div className="w-[250px] bg-gray-200/80 flex justify-center items-center rounded-xs object-cover aspect-square outline outline-2 outline-gray-200 mb-4">
                     <ListMusicIcon width="25%" height="25%" className="text-gray-500" />

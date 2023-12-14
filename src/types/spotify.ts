@@ -59,6 +59,24 @@ export type SimplifiedPlaylist = {
     uri: string
 }
 
+export type Artist = {
+  external_urls: {
+      spotify: string
+  },
+  followers: {
+      href: string,
+      total: number
+  },
+  genres: string[],
+  href: string,
+  id: string,
+  images: SpotifyImagesArray,
+  name: string,
+  popularity: number,
+  type: "artist",
+  uri: string
+}
+
 export type Playlist = {
     collaborative: boolean,
     description: string,
@@ -151,51 +169,34 @@ export type Track = {
             uri: string
         }[]
     },
-    artists: {
-        external_urls: {
-            spotify: string
-        },
-        followers: {
-            href: string,
-            total: number
-        },
-        genres: string[],
-        href: string,
-        id: string,
-        images: SpotifyImagesArray,
-        name: string,
-        popularity: number,
-        type: "artist",
-        uri: string
-    }[]
-    ,
-      available_markets: string[],
-      disc_number: number,
-      duration_ms: number,
-      explicit: false,
-      external_ids: {
-        isrc: string,
-        ean: string,
-        upc: string
-      },
-      external_urls: {
-        spotify: string
-      },
-      href: string,
-      id: string,
-      is_playable: false,
-      linked_from: {
-      },
-      restrictions: {
-        reason: string
-      },
-      name: string,
-      popularity: number,
-      preview_url: string,
-      track_number: number,
-      type: "track",
-      uri: string,
-      is_local: false
+    artists: Artist[] ,
+    available_markets: string[],
+    disc_number: number,
+    duration_ms: number,
+    explicit: false,
+    external_ids: {
+      isrc: string,
+      ean: string,
+      upc: string
+    },
+    external_urls: {
+      spotify: string
+    },
+    href: string,
+    id: string,
+    is_playable: false,
+    linked_from: {
+    },
+    restrictions: {
+      reason: string
+    },
+    name: string,
+    popularity: number,
+    preview_url: string,
+    track_number: number,
+    type: "track",
+    uri: string,
+    is_local: false
 }
 
 export type CurrentlyPlayingResponse = {
@@ -253,25 +254,7 @@ export type CurrentlyPlayingResponse = {
           }[]
           
         },
-        artists: [
-          {
-            external_urls: {
-              spotify: string
-            },
-            followers: {
-              href: string,
-              total: number
-            },
-            genres: string[],
-            href: string,
-            id: string,
-            images: SpotifyImagesArray,
-            name: string,
-            popularity: number,
-            type: "artist",
-            uri: string
-          }
-        ],
+        artists: Artist[],
         available_markets: string[],
         disc_number: number,
         duration_ms: number,
@@ -369,23 +352,7 @@ export type PlaybackStateResponse = {
               uri: string
           }[]
         },
-        artists: {
-            external_urls: {
-              spotify: string
-            },
-            followers: {
-              href: string,
-              total: number
-            },
-            genres: string[],
-            href: string,
-            id: string,
-            images: SpotifyImagesArray,
-            name: string,
-            popularity: number,
-            type: string,
-            uri: string
-          }[],
+        artists: Artist[],
         available_markets: string[],
         disc_number: number,
         duration_ms: number,

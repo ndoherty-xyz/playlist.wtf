@@ -1,5 +1,5 @@
 import { Button } from "../../shadcn/components/ui/button";
-import { PlaylistTrack } from "../../types/spotify";
+import { Track } from "../../types/spotify";
 import { PauseIcon, PlayIcon } from "lucide-react";
 import { useToast } from "../../shadcn/components/ui/use-toast";
 import { AxiosError } from "axios";
@@ -7,29 +7,28 @@ import { usePlayerHandlers } from "../Player/utils";
 
 
 type PlaylistTracksProps = {
-    playlistId: string;
-    tracks: PlaylistTrack[]
+    playlistId?: string;
+    tracks: Track[]
 }
 
 export const PlaylistTracks = ({ playlistId, tracks }: PlaylistTracksProps) => {
-
-
-    return <>
-        <div className="flex flex-col gap-2 pb-6">
-            {tracks.map((track: PlaylistTrack) => (
-                <TrackRow playlistTrack={track} playlistUri={`spotify:playlist:${playlistId}`} />
-            ))}
-        </div>
-
-    </>
+    return (
+        <>
+            <div className="flex flex-col gap-2 pb-6">
+                {tracks.map((track: Track) => (
+                    <TrackRow track={track} playlistUri={!!playlistId ? `spotify:playlist:${playlistId}` : undefined} />
+                ))}
+            </div>
+        </>
+    )
 }
 
 type TrackRowProps = {
-    playlistTrack: PlaylistTrack
-    playlistUri: string
+    track: Track
+    playlistUri?: string
 }
 
-const TrackRow = ({ playlistTrack, playlistUri }: TrackRowProps) => {
+const TrackRow = ({ track, playlistUri }: TrackRowProps) => {
     const toast = useToast()
 
     const toastError = (error: AxiosError) => {
@@ -41,25 +40,23 @@ const TrackRow = ({ playlistTrack, playlistUri }: TrackRowProps) => {
 
     const { playTrack, currentlyPlaying, pauseTrack } = usePlayerHandlers({ onError: toastError })
 
-
-
     return (
         <div className="bg-white p-2 rounded-md flex gap-2 outline outline-2 outline-gray-100 items-center justify-between pr-4">
             <div className="flex gap-2 items-center">
-                <img alt={`${playlistTrack.track.name} cover`} src={playlistTrack.track.album.images[0]?.url} width={55} height={55} className="rounded-sm object-cover aspect-square" />
+                <img alt={`${track.name} cover`} src={track.album.images[0]?.url} width={55} height={55} className="rounded-sm object-cover aspect-square" />
                 <div>
-                    <h6 className="font-semibold font-funky text-sm">{playlistTrack.track.name}</h6>
+                    <h6 className="font-semibold font-funky text-sm">{track.name}</h6>
                     <p className="text-sm text-gray-500">
-                        {playlistTrack.track.artists.map(artist => artist.name).join(', ')}
+                        {track.artists.map(artist => artist.name).join(', ')}
                     </p>
                 </div>
             </div>
-            {currentlyPlaying?.item?.uri === playlistTrack.track.uri ? (
+            {currentlyPlaying?.item?.uri === track.uri ? (
                 <Button size="icon" variant="outline" onClick={() => pauseTrack()}>
                     <PauseIcon size={20} />
                 </Button>
             ) : (
-                <Button size="icon" variant="outline" onClick={() => playTrack({ trackUri: playlistTrack.track.uri, contextUri: playlistUri })}>
+                <Button size="icon" variant="outline" onClick={() => playTrack({ trackUri: track.uri, contextUri: playlistUri })}>
                     <PlayIcon size={20} />
                 </Button>
             )}

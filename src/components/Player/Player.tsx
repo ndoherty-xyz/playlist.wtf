@@ -69,7 +69,7 @@ export const Player = () => {
                         <PauseIcon size={20} />
                     </Button>
                 ) : (
-                    <Button size="icon" variant="ghost" onClick={() => playTrack({ trackUri: track?.uri! })}>
+                    <Button size="icon" variant="ghost" onClick={() => playTrack({ trackUri: track?.uri!, contextUri: currentlyPlaying?.context.uri })}>
                         <PlayIcon size={20} />
                     </Button>
                 )}

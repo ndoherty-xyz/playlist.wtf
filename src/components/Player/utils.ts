@@ -158,7 +158,7 @@ export const usePlayerHandlers = ({ onError }: UsePlayerHandlersArgs) => {
     const playTrackMutation = useMutation({
         mutationFn: ({ trackUri, contextUri }: { trackUri: string, contextUri?: string }) => {
             const positionToUse = currentlyPlaying.data?.item.uri === trackUri ? currentlyPlaying.data?.progress_ms : 0
-            const contextUriToUse = contextUri ?? currentlyPlaying.data?.context.uri ?? undefined
+            const contextUriToUse = contextUri ?? undefined
 
             return playTrack({ token: token!, trackUri, onError: onError, positionMs: positionToUse, contextUri: contextUriToUse})
         },
