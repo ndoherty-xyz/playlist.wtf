@@ -53,30 +53,30 @@ export const Player = () => {
             </div>
             <div className="flex gap-2">
                 {currentlyPlaying?.shuffle_state ? (
-                    <Button size="icon" variant="ghost" onClick={() => changeShuffleState(false)}>
+                    <Button disabled={!trackActive} size="icon" variant="ghost" onClick={() => changeShuffleState(false)}>
                         <ShuffleIcon size={20} className="text-green-500" />
                     </Button>
                 ) : (
-                    <Button size="icon" variant="ghost" onClick={() => changeShuffleState(true)}>
+                    <Button disabled={!trackActive} size="icon" variant="ghost" onClick={() => changeShuffleState(true)}>
                         <ShuffleIcon size={20} className="text-gray-500" />
                     </Button>
                 )}
-                <Button size="icon" variant="ghost" onClick={() => previousTrack()}>
+                <Button disabled={!trackActive} size="icon" variant="ghost" onClick={() => previousTrack()}>
                     <SkipBackIcon size={20} />
                 </Button>
                 {currentlyPlaying?.is_playing ? (
-                    <Button size="icon" variant="ghost" onClick={() => pauseTrack()}>
+                    <Button disabled={!trackActive} size="icon" variant="ghost" onClick={() => pauseTrack()}>
                         <PauseIcon size={20} />
                     </Button>
                 ) : (
-                    <Button size="icon" variant="ghost" onClick={() => playTrack({ trackUri: track?.uri!, contextUri: currentlyPlaying?.context.uri })}>
+                    <Button disabled={!trackActive} size="icon" variant="ghost" onClick={() => playTrack({ trackUri: track?.uri!, contextUri: currentlyPlaying?.context.uri })}>
                         <PlayIcon size={20} />
                     </Button>
                 )}
-                <Button size="icon" variant="ghost" onClick={() => nextTrack()}>
+                <Button disabled={!trackActive} size="icon" variant="ghost" onClick={() => nextTrack()}>
                     <SkipForwardIcon size={20} />
                 </Button>
-                <AddToPlaylistButton trackURIToAdd={currentlyPlaying?.item?.uri} />
+                <AddToPlaylistButton disabled={!trackActive} trackURIToAdd={currentlyPlaying?.item?.uri} />
             </div>
 
         </div>

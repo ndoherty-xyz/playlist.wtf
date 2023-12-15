@@ -13,9 +13,10 @@ import { useState } from "react"
 
 type AddToPlaylistButtonProps = {
     trackURIToAdd: string | undefined
+    disabled?: boolean
 }
 
-export const AddToPlaylistButton = ({ trackURIToAdd }: AddToPlaylistButtonProps) => {
+export const AddToPlaylistButton = ({ trackURIToAdd, disabled }: AddToPlaylistButtonProps) => {
     const { token, profile } = useAuth()
     const toast = useToast()
 
@@ -42,6 +43,7 @@ export const AddToPlaylistButton = ({ trackURIToAdd }: AddToPlaylistButtonProps)
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button
+                    disabled={disabled}
                     variant="ghost"
                     size="icon"
                     role="combobox"

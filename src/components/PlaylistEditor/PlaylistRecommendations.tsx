@@ -1,6 +1,5 @@
 import { Trash2Icon } from "lucide-react"
 import { Button } from "../../shadcn/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../shadcn/components/ui/card"
 import { PlaylistTrack, Track } from "../../types/spotify"
 import { RecommendationSeedsModal } from "./RecommendationSeedsModal"
 import { SeedData } from "./types"
@@ -18,23 +17,27 @@ type PlaylistRecommendationsProps = {
 export const PlaylistRecommendations = ({ tracks, seeds, addSeed, removeSeed, generateRecommendations, recommendations }: PlaylistRecommendationsProps) => {
     return (
         <>
-            <Card>
-                <CardHeader className="flex justify-between flex-row items-start">
-                    <div className="flex flex-col gap-1">
-                        <CardTitle>Recommendation Seeds</CardTitle>
-                        <CardDescription>Add up to 5 seeds for the recommendation engine to generate tracks from.</CardDescription>
+            <div className="bg-white p-6 flex flex-col gap-4">
+                <div className="flex justify-between">
+                    <div>
+                        <h5 className="font-funky font-semibold text-lg">Recommendation Seeds</h5>
+                        <p className="text-sm text-gray-500">Add up to 5 seeds for the recommendation engine to generate tracks from.</p>
+
                     </div>
 
-                    <RecommendationSeedsModal tracks={tracks} addSeed={addSeed} disabled={seeds.length >= 5} />
-                </CardHeader>
-                <CardContent className="flex gap-3 flex-wrap">
+                    <Button onClick={generateRecommendations}>
+                        Generate Recommendations
+                    </Button>
+                </div>
+
+                <div className="flex gap-3 flex-wrap">
                     {
                         seeds.map((seed, index) => {
                             return (
-                                <div className="bg-gray-50 outline outline-gray-200 w-fit px-4 py-2 pr-2 rounded-md flex gap-8">
-                                    <div className="flex flex-col gap-0">
-                                        <h6 className="text-xs font-semibold text-gray-400">{seed.type.toUpperCase()}</h6>
-                                        <p className="font-semibold text-md">{seed.display}</p>
+                                <div className="bg-gray-100/50 w-fit px-4 py-3 pr-3 flex gap-8">
+                                    <div className="flex flex-col gap-0.5">
+                                        <h6 className="text-xs text font text-gray-400">{seed.type.toUpperCase()}</h6>
+                                        <p className="font-semibold text-md font-funky">{seed.display}</p>
                                     </div>
 
                                     <Button variant="ghost" size="icon" onClick={() => removeSeed(index)}>
@@ -44,13 +47,13 @@ export const PlaylistRecommendations = ({ tracks, seeds, addSeed, removeSeed, ge
                             )
                         })
                     }
-                </CardContent>
-                <CardFooter className="justify-end">
-                    <Button onClick={generateRecommendations}>
-                        Generate Recommendations
-                    </Button>
-                </CardFooter>
-            </Card>
+                    {
+                        seeds.length < 5 ? (
+                            <RecommendationSeedsModal tracks={tracks} addSeed={addSeed} disabled={seeds.length >= 5} />
+                        ) : null
+                    }
+                </div>
+            </div>
             <div className="mt-4">
                 <PlaylistTracks tracks={recommendations} />
             </div>

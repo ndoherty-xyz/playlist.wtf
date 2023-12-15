@@ -91,6 +91,12 @@
   src: url("../public/fonts/Basteleur-Moonlight.woff2");
 }
 
+@font-face {
+  font-family: "Absans";
+  src: url("../public/fonts/Absans.woff2");
+}
+
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

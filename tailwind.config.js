@@ -72,7 +72,7 @@ module.exports = {
         'spin-slow': 'spin 3s linear infinite',
       },
       'fontFamily': {
-        'funky': ["Basteleur-Moonlight", 'sans-serif']
+        'funky': ["Absans", 'sans-serif']
       }
     },
   },

@@ -28,8 +28,8 @@ export const RecommendationSeedsModal = ({ tracks, addSeed, disabled }: Recommen
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="secondary" disabled={disabled} style={{ marginTop: 0 }}>
-                    <PlusIcon size={20} className="mr-2" /> Add Seeds
+                <Button variant="secondary" size="icon" disabled={disabled} style={{ marginTop: 0 }} className="aspect-square h-[66px] w-[66px] bg-gray-100/50 rounded-none hover:bg-gray-100">
+                    <PlusIcon size={20} />
                 </Button>
             </DialogTrigger>
             <DialogContent>

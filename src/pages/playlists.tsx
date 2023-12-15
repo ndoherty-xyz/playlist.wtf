@@ -56,7 +56,7 @@ const PlaylistCard = ({ playlist }: PlaylistCardProps) => {
                     <img alt={`${playlist.name} cover`} src={playlist.images[0]?.url} className="rounded-xs w-full object-cover aspect-square outline outline-2 outline-gray-100  group-hover:outline-gray-200 group-hover:outline-4 transition-all" />
                 )}
                 <div className="flex justify-between gap-4">
-                    <h3 className="font-funky font-semibold text-base line-clamp-2">{playlist.name}</h3>
+                    <h3 className="font-funky font-semibold text-md line-clamp-2">{playlist.name}</h3>
                     <div className="w-max">
                         <Badge variant="outline" className="text-gray-500 w-max">{playlist.tracks.total} track{playlist.tracks.total !== 1 && 's'}</Badge>
                     </div>
