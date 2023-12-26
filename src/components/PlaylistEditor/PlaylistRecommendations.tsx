@@ -1,4 +1,4 @@
-import { Trash2Icon } from "lucide-react"
+import { FileAudio2Icon, MusicIcon, Trash2Icon, UserCircle2Icon } from "lucide-react"
 import { Button } from "../../shadcn/components/ui/button"
 import { PlaylistTrack, Track } from "../../types/spotify"
 import { RecommendationSeedsModal } from "./RecommendationSeedsModal"
@@ -25,7 +25,7 @@ export const PlaylistRecommendations = ({ tracks, seeds, addSeed, removeSeed, ge
 
                     </div>
 
-                    <Button onClick={generateRecommendations}>
+                    <Button disabled={seeds.length === 0} onClick={generateRecommendations}>
                         Generate Recommendations
                     </Button>
                 </div>
@@ -34,10 +34,18 @@ export const PlaylistRecommendations = ({ tracks, seeds, addSeed, removeSeed, ge
                     {
                         seeds.map((seed, index) => {
                             return (
-                                <div className="bg-gray-100/50 w-fit px-4 py-3 pr-3 flex gap-8">
-                                    <div className="flex flex-col gap-0.5">
-                                        <h6 className="text-xs text font text-gray-400">{seed.type.toUpperCase()}</h6>
-                                        <p className="font-semibold text-md font-funky">{seed.display}</p>
+                                <div className="bg-gray-100/50 w-fit px-4 py-2 pr-3 flex gap-8 max-w-full">
+                                    <div className="flex gap-2.5 items-center">
+                                        {
+                                            seed.type === 'track' ? (
+                                                <FileAudio2Icon size={20} />
+                                            ) : seed.type === 'artist' ? (
+                                                <UserCircle2Icon size={20} />
+                                            ) : (
+                                                <MusicIcon size={20} />
+                                            )
+                                        }
+                                        <p className="font-medium text-md font-funky line-clamp-1">{seed.display}</p>
                                     </div>
 
                                     <Button variant="ghost" size="icon" onClick={() => removeSeed(index)}>

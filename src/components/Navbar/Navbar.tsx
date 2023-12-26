@@ -12,7 +12,7 @@ const Navbar = () => {
         <div className="w-full py-3 px-6 flex justify-between items-center border-b border-gray-200 bg-white">
             <Link to="/">
                 <div className="flex gap-2 items-center">
-                    <h2 className="font-semibold text-lg font-funky">PLAYLIST.WTF</h2>
+                    <h2 className="text-lg font-funky tracking-w font-semibold">playlist.wtf</h2>
                 </div>
             </Link>
 

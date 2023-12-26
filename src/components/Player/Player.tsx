@@ -45,7 +45,7 @@ export const Player = () => {
 
                 </div>
             ) : (
-                'No active track'
+                <p className="font-funky">No active track</p>
             )}
             <div className="flex gap-2">
 
@@ -69,7 +69,7 @@ export const Player = () => {
                         <PauseIcon size={20} />
                     </Button>
                 ) : (
-                    <Button disabled={!trackActive} size="icon" variant="ghost" onClick={() => playTrack({ trackUri: track?.uri!, contextUri: currentlyPlaying?.context.uri })}>
+                    <Button disabled={!trackActive} size="icon" variant="ghost" onClick={() => playTrack({ trackUri: track?.uri!, contextUri: currentlyPlaying?.context?.uri })}>
                         <PlayIcon size={20} />
                     </Button>
                 )}

@@ -41,7 +41,7 @@ const TrackRow = ({ track, playlistUri }: TrackRowProps) => {
     const { playTrack, currentlyPlaying, pauseTrack } = usePlayerHandlers({ onError: toastError })
 
     return (
-        <div className="p-2 py-4 flex gap-2  items-center justify-between pr-4 border-b border-gray-200/75 last:border-none">
+        <div className="py-4 px-6 flex gap-2  items-center justify-between  border-b border-gray-200/75 last:border-none">
             <div className="flex gap-4 items-center">
                 <img alt={`${track.name} cover`} src={track.album.images[0]?.url} width={60} height={60} className="object-cover aspect-square outline outline-2 outline-gray-200/50" />
                 <div>
