@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { me, myEditablePlaylists } from "../utils/spotify"
+import { myEditablePlaylists } from "../utils/spotify"
 import { SimplifiedPlaylist } from "../types/spotify"
 import { Link } from "react-router-dom"
 import { PageContainer } from "../components/Container"
