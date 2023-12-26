@@ -6,7 +6,7 @@ import PlaylistDetailsPage from './pages/PlaylistDetails';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { removeTokenFromLocalStorage, storeTokenInLocalStorage } from './utils/auth';
 import { Toaster } from './shadcn/components/ui/toaster';
-import { PlaylistsPage } from './pages/Playlists';
+import { PlaylistsPage } from './pages/playlists';
 import { NavbarFooterLayout } from './pages/layouts/NavbarFooterLayout';
 
 const queryClient = new QueryClient()
