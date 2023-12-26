@@ -21,7 +21,7 @@ jobs:
           REACT_APP_RESPONSE_TYPE: ${{ secrets.REACT_APP_RESPONSE_TYPE }}
 
       - name: Deploying to gh-pages branch
-        uses: JamesIves/github-pages-deploy-action@4.1.5
+        uses: JamesIves/github-pages-deploy-action@4.5.0
         with:
           branch: gh-pages
           folder: build
