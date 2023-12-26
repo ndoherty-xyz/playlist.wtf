@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/static/css/main.3da40dfd.css",
+    "main.js": "/static/js/main.146b4bf5.js",
+    "static/js/787.c1112931.chunk.js": "/static/js/787.c1112931.chunk.js",
+    "static/media/Absans.woff2": "/static/media/Absans.04009a2f86865087f727.woff2",
+    "static/media/Basteleur-Bold.woff2": "/static/media/Basteleur-Bold.1e74a4265dfcaec4ed99.woff2",
+    "static/media/Basteleur-Moonlight.woff2": "/static/media/Basteleur-Moonlight.497a6a55f42d0cf372db.woff2",
+    "index.html": "/index.html",
+    "main.3da40dfd.css.map": "/static/css/main.3da40dfd.css.map",
+    "main.146b4bf5.js.map": "/static/js/main.146b4bf5.js.map",
+    "787.c1112931.chunk.js.map": "/static/js/787.c1112931.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3da40dfd.css",
+    "static/js/main.146b4bf5.js"
+  ]
+}
