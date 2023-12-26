@@ -13,6 +13,7 @@ import { useCallback, useState } from "react"
 import { SeedData } from "../components/PlaylistEditor/types"
 import { getRecommendations } from "../components/PlaylistEditor/utils"
 import { PlaylistTrack, Track } from "../types/spotify"
+import { Loader2Icon } from "lucide-react"
 
 
 const PlaylistDetailsPage = () => {
@@ -20,6 +21,7 @@ const PlaylistDetailsPage = () => {
     const { playlistId } = useParams()
     const [activeSeeds, setActiveSeeds] = useState<SeedData[]>([])
     const [recommendations, setRecommendations] = useState<Track[]>([])
+    const [recommendationsLoading, setRecommendationsLoading] = useState<boolean>(false)
 
     const playlistQuery = useQuery({
         queryKey: ['playlist', playlistId],
@@ -36,8 +38,10 @@ const PlaylistDetailsPage = () => {
     })
 
     const generateAndStoreRecommendations = useCallback(async () => {
+        setRecommendationsLoading(true)
         const recommendations: { tracks: Track[] } = await getRecommendations({ token: token!, seeds: activeSeeds })
         setRecommendations(recommendations.tracks)
+        setRecommendationsLoading(false)
     }, [activeSeeds, token])
 
     const removeSeed = (index: number) => {
@@ -61,13 +65,13 @@ const PlaylistDetailsPage = () => {
     if (playlistQuery.isLoading) {
         return (
             <PageContainer className="flex justify-center items-center">
-                Loading!!!
+                <Loader2Icon className="animate-spin" size={24} />
             </PageContainer>
         )
     }
 
     return (
-        <PageContainer className="flex flex-col py-12">
+        <PageContainer className="flex flex-col py-6 md:py-12">
             <PlaylistInfo playlist={playlist!} playlistTracks={tracksQuery.data ?? []} />
             <Tabs defaultValue="tracks">
                 <div className="flex justify-center mt-6 mb-4">
@@ -80,7 +84,7 @@ const PlaylistDetailsPage = () => {
                     <PlaylistTracks tracks={tracksQuery.data?.map((playlistTrack: PlaylistTrack) => playlistTrack.track) ?? []} playlistId={playlistId!} />
                 </TabsContent>
                 <TabsContent value="recommendations">
-                    <PlaylistRecommendations recommendations={recommendations} generateRecommendations={generateAndStoreRecommendations} removeSeed={removeSeed} tracks={tracksQuery.data ?? []} seeds={activeSeeds} addSeed={(seed) => setActiveSeeds((currentSeeds) => currentSeeds.concat(seed))} />
+                    <PlaylistRecommendations loading={recommendationsLoading} recommendations={recommendations} generateRecommendations={generateAndStoreRecommendations} removeSeed={removeSeed} tracks={tracksQuery.data ?? []} seeds={activeSeeds} addSeed={(seed) => setActiveSeeds((currentSeeds) => currentSeeds.concat(seed))} />
                 </TabsContent>
             </Tabs>
 

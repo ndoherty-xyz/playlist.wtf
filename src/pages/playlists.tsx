@@ -27,7 +27,7 @@ export const PlaylistsPage = () => {
     }
 
     return (
-        <PageContainer className="flex flex-col py-12">
+        <PageContainer className="flex flex-col py-4 md:py-12">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full gap-8 sm:gap-16 pb-6">
                 {(playlistsQuery.isLoading ? loadingPlaylistArray : playlists)?.map(playlist => <PlaylistCard playlist={playlist} />)}
             </div>

@@ -80,8 +80,8 @@ export const RecommendationSeedsModal = ({ tracks, addSeed, disabled }: Recommen
                                             <div className="flex gap-2 items-center">
                                                 <img alt={`${playlistTrack.track.name} cover`} src={playlistTrack.track.album.images[0]?.url} width={55} height={55} className="object-cover aspect-square" />
                                                 <div>
-                                                    <h6 className="font-semibold font-funky text-sm">{playlistTrack.track.name}</h6>
-                                                    <p className="text-sm text-gray-500">
+                                                    <h6 className="font-semibold font-funky text-sm line-clamp-2">{playlistTrack.track.name}</h6>
+                                                    <p className="text-sm text-gray-500 line-clamp-1">
                                                         {playlistTrack.track.artists.map(artist => artist.name).join(', ')}
                                                     </p>
                                                 </div>
@@ -117,9 +117,9 @@ export const RecommendationSeedsModal = ({ tracks, addSeed, disabled }: Recommen
                                 </CommandGroup>
                             </Command>
                         </TabsContent>
-                        <TabsContent value="genres">
+                        <TabsContent value="genres" className="pt-4">
                             <Command className="max-h-96 w-full outline outline-1 outline-gray-200">
-                                <CommandInput placeholder="Search for an artist in your playlist..." />
+                                <CommandInput placeholder="Search for an genre..." />
                                 <CommandEmpty>No genre found.</CommandEmpty>
                                 <CommandGroup className="overflow-scroll">
                                     {genreSeedsQuery.data?.genres?.map((genre: string) => (

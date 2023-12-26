@@ -1,20 +1,25 @@
-import { FileAudio2Icon, MusicIcon, Trash2Icon, UserCircle2Icon } from "lucide-react"
+import { FileAudio2Icon, Loader2, MusicIcon, Trash2Icon, UserCircle2Icon } from "lucide-react"
 import { Button } from "../../shadcn/components/ui/button"
 import { PlaylistTrack, Track } from "../../types/spotify"
 import { RecommendationSeedsModal } from "./RecommendationSeedsModal"
 import { SeedData } from "./types"
 import { PlaylistTracks } from "./PlaylistTracks"
+import { useWindowSize } from "../../utils/useWindowSize"
 
 type PlaylistRecommendationsProps = {
     tracks: PlaylistTrack[]
     seeds: SeedData[]
     recommendations: Track[]
+    loading: boolean
     addSeed: (seed: SeedData) => void
     removeSeed: (seedIndex: number) => void
     generateRecommendations: () => void;
 }
 
-export const PlaylistRecommendations = ({ tracks, seeds, addSeed, removeSeed, generateRecommendations, recommendations }: PlaylistRecommendationsProps) => {
+export const PlaylistRecommendations = ({ tracks, seeds, addSeed, removeSeed, generateRecommendations, recommendations, loading }: PlaylistRecommendationsProps) => {
+    const windowSize = useWindowSize()
+    const isMobile = windowSize.width <= 768
+
     return (
         <>
             <div className="bg-white p-6 flex flex-col gap-4">
@@ -25,9 +30,9 @@ export const PlaylistRecommendations = ({ tracks, seeds, addSeed, removeSeed, ge
 
                     </div>
 
-                    <Button disabled={seeds.length === 0} onClick={generateRecommendations}>
+                    {!isMobile && <Button disabled={seeds.length === 0} onClick={generateRecommendations}>
                         Generate Recommendations
-                    </Button>
+                    </Button>}
                 </div>
 
                 <div className="flex gap-3 flex-wrap">
@@ -61,9 +66,20 @@ export const PlaylistRecommendations = ({ tracks, seeds, addSeed, removeSeed, ge
                         ) : null
                     }
                 </div>
+                {
+                    isMobile && <Button disabled={seeds.length === 0} onClick={generateRecommendations}>
+                        Generate Recommendations
+                    </Button>
+                }
             </div>
             <div className="mt-4">
-                <PlaylistTracks tracks={recommendations} />
+                {loading ? (
+                    <div className="w-full flex justify-center items-center py-12">
+                        <Loader2 className="animate-spin" size={24} />
+                    </div>
+                ) :
+                    <PlaylistTracks tracks={recommendations} />
+                }
             </div>
         </>
     )

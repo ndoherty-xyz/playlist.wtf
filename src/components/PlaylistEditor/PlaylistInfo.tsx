@@ -34,7 +34,7 @@ export const PlaylistInfo = ({ playlist, playlistTracks }: PlaylistInfoProps) =>
                 <img alt={`${playlist.name} cover`} src={playlist.images[0]?.url} width={250} height={250} className="rounded-xs object-cover aspect-square outline outline-2 outline-gray-200 mb-4" />
             )}
             <h1 className="text-2xl font-semibold font-funky text-center">{playlist.name}</h1>
-            <p className="text-gray-600 mb-2">{playlist.description}</p>
+            <p className="text-gray-600 mb-2 text-center">{playlist.description}</p>
             <div className="flex gap-1">
                 {playlist.collaborative && <Badge variant="default">Collaborative</Badge>}
                 {playlist.public ? <Badge variant="default">Public</Badge> : <Badge variant="default">Private</Badge>}

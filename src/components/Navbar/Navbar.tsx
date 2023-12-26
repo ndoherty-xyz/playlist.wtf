@@ -9,10 +9,10 @@ const Navbar = () => {
     const token = useContext(SpotifyTokenContext)
 
     return (
-        <div className="w-full py-3 px-6 flex justify-between items-center border-b border-gray-200 bg-white">
+        <div className="w-full py-2 px-4 md:py-3 md:px-6 flex justify-between items-center border-b border-gray-200 bg-white">
             <Link to="/">
                 <div className="flex gap-2 items-center">
-                    <h2 className="text-lg font-funky tracking-w font-semibold">playlist.wtf</h2>
+                    <h2 className="text-base md:text-lg font-funky tracking-w font-semibold">playlist.wtf</h2>
                 </div>
             </Link>
 
